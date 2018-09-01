@@ -1,7 +1,7 @@
 # SurveillanceMonitor
 Repo for RTSP camera matrix for Raspberry Pi based surveillance monitor or video matrix
 
-These shell scripts are designed for my type of IP camera (Amcrest ip2m-842e).  The script works by calling multiple instances
+These shell scripts are designed for IP camera streams.  The script works by calling multiple instances
 of omxplayer using 'screen'.  I am specifically using RTSP and calling the substream of each camera, allowing primary streams
 availability for other services.  
 
