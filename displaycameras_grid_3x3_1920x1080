@@ -1,0 +1,61 @@
+#!/bin/bash
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Displays camera feeds for monitoring
+# Description:
+### END INIT INFO
+# Camera Feeds & Positions
+top_1="screen -dmS top_1 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"0 0 640 360\"
+\"rtsp://username:password@ip_address0:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+top_2="screen -dmS top_2 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"640 0 1280 360\"
+\"rtsp://username:password@ip_address1:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+top_3="screen -dmS top_3 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"1280 0 1920 360\"
+\"rtsp://username:password@ip_address2:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+middle_1="screen -dmS middle_1 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"0 360 640 720\"
+\"rtsp://username:password@ip_address3:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+middle_2="screen -dmS middle_2 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"640 360 1280 720\"
+rtsp://username:username@ip_address8/img/video.sav --live -n -1'";
+middle_3="screen -dmS middle_3 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"1280 360 1920 720\"
+\"rtsp://username:password@ip_address4:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+bottom_1="screen -dmS bottom_1 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"0 720 640 1080\"
+\"rtsp://username:password@ip_address5:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+bottom_2="screen -dmS bottom_2 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"640 720 1280 1080\"
+\"rtsp://username:password@ip_address6:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+bottom_3="screen -dmS bottom_3 sh -c 'omxplayer --avdict rtsp_transport:tcp --win \"1280 720 1920 1080\"
+\"rtsp://username:password@ip_address7:554/cam/realmonitor?channel=1&subtype=1\" --live -n -1'";
+# Camera Feed Names
+# (variable names from above, separated by a space)
+camera_feeds=(top_1 top_2 top_3 middle_1 middle_2 middle_3 bottom_1 bottom_2 bottom_3)
+#---- There should be no need to edit anything below this line ----
+# Start displaying camera feeds
+case "$1" in
+start)
+for i in "${camera_feeds[@]}"
+do
+eval eval '$'$i
+done
+echo "Camera Display Started"
+;;
+# Stop displaying camera feeds
+stop)
+sudo killall omxplayer.bin
+echo "Camera Display Ended"
+;;
+# Restart any camera feeds that have died
+repair)
+for i in "${camera_feeds[@]}"
+do
+if !(sudo screen -list | grep -q $i)
+then
+eval eval '$'$i
+echo "$i is now running"
+fi
+done
+;;
+*)
+echo "Usage: /etc/init.d/displaycameras {start|stop|repair}"
+exit 1
+;;
+esac
